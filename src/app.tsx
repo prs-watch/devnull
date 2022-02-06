@@ -79,12 +79,7 @@ export function App() {
             }}
         >
             <CssBaseline />
-            <Grid
-                container
-                sx={{
-                    border: "1px solid gray",
-                }}
-            >
+            <Grid container>
                 <Grid
                     item
                     xs={12}

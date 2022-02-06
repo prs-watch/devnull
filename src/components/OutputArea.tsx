@@ -1,3 +1,4 @@
+import { useEffect } from "preact/hooks";
 import {
     Typography,
     List,
@@ -7,12 +8,38 @@ import {
     Divider,
 } from "@mui/material";
 import { Toot } from "../types/Toot";
+import ReactMarkdown from "react-markdown";
+
+import hljs from "highlight.js/lib/core";
+import typescript from "highlight.js/lib/languages/typescript";
+import javascript from "highlight.js/lib/languages/javascript";
+import python from "highlight.js/lib/languages/python";
+import sql from "highlight.js/lib/languages/sql";
+import ruby from "highlight.js/lib/languages/ruby";
+import bash from "highlight.js/lib/languages/bash";
+import css from "highlight.js/lib/languages/css";
+import json from "highlight.js/lib/languages/json";
+import yaml from "highlight.js/lib/languages/yaml";
 
 type Props = {
     toots: Toot[];
 };
 
+hljs.registerLanguage("python", python);
+hljs.registerLanguage("typescript", typescript);
+hljs.registerLanguage("javascript", javascript);
+hljs.registerLanguage("sql", sql);
+hljs.registerLanguage("ruby", ruby);
+hljs.registerLanguage("bash", bash);
+hljs.registerLanguage("css", css);
+hljs.registerLanguage("json", json);
+hljs.registerLanguage("yaml", yaml);
+
 export const OutputArea = (props: Props) => {
+    useEffect(() => {
+        hljs.initHighlighting();
+    });
+
     return props.toots.length === 0 ? (
         <Typography
             variant="body1"
@@ -45,10 +72,15 @@ export const OutputArea = (props: Props) => {
                                 }}
                             >
                                 <ListItemText
+                                    classes={{ root: "markdown-body" }}
                                     primaryTypographyProps={{
                                         fontFamily: "Kiwi Maru",
                                     }}
-                                    primary={toot.text}
+                                    primary={
+                                        <ReactMarkdown>
+                                            {toot.text}
+                                        </ReactMarkdown>
+                                    }
                                     secondary={toot.time}
                                 />
                             </ListItem>
