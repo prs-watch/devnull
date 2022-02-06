@@ -1,0 +1,7 @@
+html, body {
+    height: 100vh;
+}
+
+.css-18tla3o-MuiList-root::-webkit-scrollbar {
+    display:none;
+}

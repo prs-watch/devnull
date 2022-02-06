@@ -1,0 +1,26 @@
+{
+  "name": "devnull",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@fontsource/amita": "^4.5.2",
+    "@fontsource/kiwi-maru": "^4.5.5",
+    "@mui/icons-material": "^5.3.1",
+    "@mui/material": "^5.4.0",
+    "localforage": "^1.10.0",
+    "preact": "^10.5.15",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.1.5",
+    "@types/uuid": "^8.3.4",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.2"
+  }
+}
