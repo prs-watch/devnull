@@ -10,6 +10,12 @@ import {
   TextField,
   Button,
   Stack,
+  Divider,
+  Slide,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from "@mui/material";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -56,6 +62,7 @@ const __getTime = (): string => {
 export function App() {
   const [tootText, setTootText] = useState<string>("");
   const [toots, setToots] = useState<Toot[]>([]);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   // 初期化
   useEffect(() => {
@@ -92,9 +99,14 @@ export function App() {
   };
 
   const handleRm = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogExecute = () => {
     setToots([]);
     localforage.removeItem("toots");
-  };
+    setOpenDialog(false);
+  }
 
   return (
     <Container
@@ -103,16 +115,22 @@ export function App() {
       }}
     >
       <CssBaseline />
-      <Grid container>
+      <Grid
+        container
+        sx={{
+          border: "1px solid gray",
+        }}
+      >
         <Grid
           item
           xs={12}
           sx={{
-            bgcolor: "gray",
+            bgcolor: "black",
           }}
         >
           <Typography
             variant="h2"
+            textAlign="center"
             gutterBottom
             sx={{
               fontWeight: "bold",
@@ -125,50 +143,76 @@ export function App() {
         </Grid>
         <Grid
           container
-          spacing={3}
           sx={{
             height: "90vh",
-            paddingTop: "1rem",
           }}
         >
-          <Grid
-            item
-            xs={4}
-            sx={{
-              padding: "1rem",
-              borderRight: "1px solid gray",
-            }}
-          >
-            <TextField
-              fullWidth
-              onChange={handleChange}
-              multiline
-              value={tootText}
-              rows={4}
+          <Grid item xs={12}>
+            <Container
               sx={{
+                paddingTop: "1rem",
                 paddingBottom: "1rem",
               }}
-            />
-            <Stack spacing={1} direction="row">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleEcho}
-                startIcon={<CreateIcon />}
-              >
-                echo
-              </Button>
-              <Button
-                onClick={handleRm}
-                variant="contained"
-                color="error"
-                startIcon={<DeleteIcon />}
-              >
-                rm -rf
-              </Button>
-            </Stack>
-          </Grid>
-          <Grid item xs={8}>
+            >
+              <TextField
+                variant="standard"
+                fullWidth
+                onChange={handleChange}
+                multiline
+                value={tootText}
+                rows={4}
+                placeholder="思いの丈をechoしてくれよ"
+                sx={{
+                  paddingBottom: "1rem",
+                  fontFamily: "Kiwi Maru",
+                }}
+                inputProps={{
+                  style: {
+                    fontFamily: "Kiwi Maru",
+                  },
+                }}
+              />
+              <Stack spacing={1} direction="row">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleEcho}
+                  startIcon={<CreateIcon />}
+                >
+                  echo
+                </Button>
+                <Button
+                  onClick={handleRm}
+                  variant="contained"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                >
+                  rm -rf
+                </Button>
+              </Stack>
+              <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogContent sx={{
+                  fontFamily: "Kiwi Maru",
+                }}>
+                  思いの丈は消え去ります。本当に消しますか？
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleDialogExecute} color="error" sx={{
+                    fontFamily: "Kiwi Maru",
+                  }}>
+                    削除
+                  </Button>
+                  <Button onClick={() => setOpenDialog(false)} color="primary" sx={{
+                    fontFamily: "Kiwi Maru",
+                  }}>
+                    キャンセル
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </Container>
+            <Divider textAlign="center">
+              <Typography variant="h5">LTL</Typography>
+            </Divider>
             {toots.length === 0 ? (
               <Typography
                 variant="body1"
@@ -178,8 +222,7 @@ export function App() {
                   fontFamily: "Kiwi Maru",
                 }}
               >
-                /dev/nullへのechoがされていないです。
-                思いの丈をechoして、嫌になったらrm -rfして下さい。
+                思いの丈をechoして、嫌になったらrm -rfしてくれよ。
               </Typography>
             ) : (
               <List
@@ -191,15 +234,27 @@ export function App() {
               >
                 {toots.map((toot) => {
                   return (
-                    <ListItem>
-                      <ListItemText
-                        primaryTypographyProps={{
-                          fontFamily: "Kiwi Maru",
-                        }}
-                        primary={toot.text}
-                        secondary={toot.time}
-                      />
-                    </ListItem>
+                    <>
+                      <Slide direction="right" in>
+                        <ListItem
+                          alignItems="flex-start"
+                          sx={{
+                            "&:hover": {
+                              backgroundColor: "whitesmoke",
+                            },
+                          }}
+                        >
+                          <ListItemText
+                            primaryTypographyProps={{
+                              fontFamily: "Kiwi Maru",
+                            }}
+                            primary={toot.text}
+                            secondary={toot.time}
+                          />
+                        </ListItem>
+                      </Slide>
+                      <Divider />
+                    </>
                   );
                 })}
               </List>
